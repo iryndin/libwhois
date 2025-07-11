@@ -21,7 +21,9 @@ func (proxiedWhoisClientImpl) Request2(prx proxy.Dialer, host string, port int, 
 	if err != nil {
 		return "", fmt.Errorf("whois: connect to proxy or destination server failed: %w", err)
 	}
-	defer conn.Close()
+	defer func() {
+		_ = conn.Close()
+	}()
 
 	return readDataFromConn(conn, query)
 }
@@ -32,7 +34,10 @@ func (proxiedWhoisClientImpl) RequestWithTimeout(prx proxy.Dialer, host string, 
 	if err != nil {
 		return "", fmt.Errorf("whois: connect to proxy or destination server failed: %w", err)
 	}
-	defer conn.Close()
+	defer func() {
+		_ = conn.Close()
+	}()
+
 	elapsed := time.Since(start)
 
 	_ = conn.SetWriteDeadline(time.Now().Add(timeout - elapsed))
