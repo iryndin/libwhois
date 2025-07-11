@@ -8,9 +8,15 @@
 
 Golang utilities to work with WHOIS: fetch whois info, parse it
 
-## 2. Examples
+## 2. Installation
 
-### 2.1. Get whois host for zone
+```shell
+go get -u github.com/iryndin/libwhois
+```
+
+## 3. Examples
+
+### 3.1. Get whois host for zone
 
 ```go
     whoisHost, exists := libwhois.GetZoneWhoisHost("com")
@@ -21,7 +27,7 @@ Golang utilities to work with WHOIS: fetch whois info, parse it
     }
 ```
 
-### 2.2. Get whois hosts for all zones
+### 3.2. Get whois hosts for all zones
 
 ```go
     whoisHostMap := libwhois.GetWhoisHosts()
@@ -37,4 +43,45 @@ Golang utilities to work with WHOIS: fetch whois info, parse it
     } 
 ```
 
+### 3.3. Get whois for a domain 
 
+```go
+    import (
+        "log"
+        "github.com/iryndin/libwhois"
+    )
+
+    ...
+ 
+    whoisClient := libwhois.NewSimpleWhoisClient()
+    whois, err := whoisClient.Request("whois.verisign-grs.com", "chatgpt.com")
+
+    if err != nil {
+        log.Fatalf("Error fetching whois response: %v", err)
+    }
+
+    print(whois)
+```
+
+### 3.4. Get whois via proxy
+
+```go
+    import (
+        "log"
+        "github.com/iryndin/libwhois"
+    )
+
+    prx, err := libwhois.CreateSocks5Proxy("38.112.217.17", 5868, "user22", "pass1234")
+    if err != nil {
+        log.Fatalf("Failed to create proxy: %v", err)
+    }
+
+    whoisClient := libwhois.NewProxiedWhoisClient()
+    whois, err := whoisClient.Request(prx, "whois.nic.io", "github.io")
+
+    if err != nil {
+        log.Fatalf("Error fetching whois response: %v", err)
+    }
+
+    print(whois)
+```
