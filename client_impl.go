@@ -21,7 +21,9 @@ func (simpleWhoisClientImpl) Request2(host string, port int, query string) (stri
 	if err != nil {
 		return "", fmt.Errorf("failed to connect to '%s': %w", hostPortString, err)
 	}
-	defer conn.Close()
+	defer func() {
+		_ = conn.Close()
+	}()
 
 	return readDataFromConn(conn, query)
 }
@@ -32,7 +34,9 @@ func (simpleWhoisClientImpl) RequestWithTimeout(host string, port int, query str
 	if err != nil {
 		return "", fmt.Errorf("failed to connect to '%s': %w", hostPortString, err)
 	}
-	defer conn.Close()
+	defer func() {
+		_ = conn.Close()
+	}()
 
 	return readDataFromConn(conn, query)
 }

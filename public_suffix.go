@@ -87,7 +87,10 @@ func GetAllTopLevelPublicSuffixesEx() []PublicSuffixEx {
 
 func isLatinLettersDigitsDash(s string) bool {
 	for _, r := range s {
-		if !(r >= 'a' && r <= 'z' || r >= '0' && r <= '9' || r == '-') {
+		isLatinSymbol := r >= 'a' && r <= 'z'
+		isDigit := r >= '0' && r <= '9'
+
+		if !isLatinSymbol && !isDigit && r != '-' {
 			return false
 		}
 	}
